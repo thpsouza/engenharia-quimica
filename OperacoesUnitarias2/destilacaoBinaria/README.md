@@ -1,48 +1,63 @@
-Título: Implementação do método gráfico de McCabe-Thiele
-Autor: Thiago Pacheco de Souza
-Data: 2025-10-08
-Versão: 1.0
-Descrição:
-    Este programa aplica o método gráfico de McCabe-Thiele para resoluçaõ de um sistema de destilação 
-    binária, gerando o gráfico e indicando os estágios necessários.
+# Implementação do Método Gráfico de McCabe-Thiele
 
-    É dividido em dois módulos principais:
-    1- Calculo do equilíbrio termodinâmico.
-    2- Implementação do método de McCabe-Thiele.
+**Autor:** Thiago Pacheco de Souza  
+**Data:** 08/10/2025  
+**Versão:** 1.0  
 
-    A curva de equilibrio é calculada modelando a fase líquida pelo coeficiente de atividade, γ, e 
-    pela pressão de saturação de cada componente. Utiliza-se o modelo NRTL para γ, e a equação de 
-    Antoine para Psat. As correção de Poynting e os coeficientes de fugacidade não foram implementados. 
-    Logo, a curva de equilíbrio termodinâmico gerada só é precisa para sistemas em baixas pressões.
+---
 
-    De momento, as espécies químicas suportadas são:
-    - Água
-    - Metanol
-    - Etanol
-    - Benzeno
-    - Tolueno
-    - p-Xileno
-    - Acetona
-    - Cloroformio
+## Descrição
 
-    O módulo de aplicação do método é independente do módulo de equilíbrio, mas requer uma função de
-    equilíbrio para esboçar os degraus. Futuramente, pretende-se implementar uma funcionalidade de 
-    inserção manual dos dados de equilíbrio.
+Este programa aplica o **método gráfico de McCabe-Thiele** para a resolução de um sistema de **destilação binária**, gerando o gráfico e indicando os estágios necessários.
 
-    Além dos módulos principais, há 3 scripts para testar individual cada funcionalidade da geração
-    de dados de equilíbrio.
+O projeto é dividido em dois módulos principais:
 
-Como usar:
-    - Execute este script diretamente para rodar a aplicação.
-    - Os parâmetros de entrada podem ser ajustados nas variáveis globais abaixo.
-    - O modo interativo permite alterar os parâmetros de entrada do problema dinâmicamente. 
-    (Pode ser um pouco lento.)
+1. **Cálculo do equilíbrio termodinâmico**  
+2. **Implementação do método de McCabe-Thiele**
+    
+A **curva de equilíbrio** é calculada modelando a fase líquida pelo **coeficiente de atividade** (γ) e pela **pressão de saturação** de cada componente.  
+Utiliza-se o modelo **NRTL** para γ e a **equação de Antoine** para Psat. 
 
-Dependências externas:
-    - numpy
-    - matplotlib
-    - scipy
+As correções de Poynting e os coeficientes de fugacidade não foram implementados. Assim, a curva de equilíbrio termodinâmico gerada é precisa apenas para sistemas em baixas pressões.
 
-Limitações conhecidas:
-    No modo interativo, é possível que atualizações muito rápidas crashem o programa.
-    Além disso, deve-se evitar situações de 'pinch', pois também irá causar o travamento da aplicação.
+### Espécies químicas atualmente suportadas:
+- Água  
+- Metanol  
+- Etanol  
+- Benzeno  
+- Tolueno  
+- p-Xileno  
+- Acetona  
+- Clorofórmio  
+
+O módulo de aplicação do método é independente do módulo de equilíbrio, mas requer uma função de equilíbrio para esboçar os degraus. Para fins de performance, isso é feito interpolando
+entre os pontos gerados pelo cálculo do equilíbrio. (Por padrão, são gerados 100 pontos.)
+Futuramente, pretende-se implementar uma funcionalidade para inserção manual dos dados de equilíbrio, bem como uma opção de alterar a quantidade de pontos gerados pela calculadora implementada.
+
+Além do módulo principal, há três scripts auxiliares para testar individualmente cada funcionalidade da geração de dados de equilíbrio, localizados na pasta 'Testes'.
+
+---
+
+## Como usar:
+
+1. Execute o arquivo **main.py** diretamente para rodar a aplicação. (A importação da aplicação como um pacote externo ainda não é suportada.)
+2. Os parâmetros de entrada podem ser ajustados nas variáveis globais dentro desse arquivo.
+3. O modo interativo permite alterar dinamicamente os parâmetros do problema.  
+   > Observação: esse modo pode ser um pouco lento.
+
+---
+
+# Dependências externas:
+
+- `numpy`  
+- `matplotlib`  
+- `scipy`
+
+
+## Limitações conhecidas:
+- No modo interativo, é possível que atualizações muito rápidas crashem o programa.
+- Deve-se evitar situações de 'pinch', pois também irá causar o travamento da aplicação.
+- Por conta da interpolação dos dados equilíbrio, não há precisão total no desenho da escada de McCabe-Thiele, similarmente ao que ocorre na aplicação real deste método gráfico.
+
+
+*Implementação didática do método de McCabe-Thiele para estudos de destilação binária.*
