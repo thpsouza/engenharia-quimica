@@ -46,10 +46,6 @@ Dependências externas:
     - scipy
 """
 
-
-from logica import aplicar_metodo_mccabe_thiele
-
-
 pressao = 101325
 especies = "etanol", "agua"
 zF = 0.6
@@ -61,6 +57,17 @@ INTERATIVO = False #Pode deixar um pouco lento...
 SALVAR = False
 
 
+try:
+    from logica import aplicar_metodo_mccabe_thiele
+except ModuleNotFoundError as e:
+    if any(('numpy' in e.msg, 'scipy' in e.msg, 'matplotlib' in e.msg)):
+        print("Para rodar essa aplicação, é necessário ter instaladas as bibliotecas 'numpy', 'scipy' e 'matplotlib'.\
+              \n\nIsso pode ser feito através do comando: 'pip install nome_do_modulo'. \n")
+    else:
+        print("Essa aplicação deve ser executada diretamente de sua pasta raiz. \n")
+    input()
+    
+    
 def main():
     aplicar_metodo_mccabe_thiele(especies, zF, xD, xB, R, q, pressao, INTERATIVO, SALVAR)
 

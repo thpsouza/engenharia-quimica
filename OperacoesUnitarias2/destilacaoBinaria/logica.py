@@ -41,6 +41,7 @@ def atualizar_plot(x, fig, ax, McCabe, slider_zF, slider_q, interpolacao):
 
 
 def aplicar_metodo_mccabe_thiele(especies, zF, xD, xB, R, q, pressao=101325, interativo=False, save=False):
+    print("Calculando...\n")
     Eq = EquilibrioTermodinamico()
     Mc = McCabeThieleMethod(zF, xD, xB, R, q)
     fig,ax = plt.subplots(figsize=(9,9))
