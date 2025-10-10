@@ -1,8 +1,8 @@
 # Implementação do Método Gráfico de McCabe-Thiele
 
 **Autor:** Thiago Pacheco de Souza  
-**Data:** 08/10/2025  
-**Versão:** 1.0  
+**Data:** 10/10/2025  
+**Versão:** 1.1 
 
 ---
 
@@ -56,8 +56,8 @@ Além do módulo principal, há três scripts auxiliares para testar individualm
 
 ## Limitações conhecidas:
 - No modo interativo, é possível que atualizações muito rápidas crashem o programa.
-- Deve-se evitar situações de 'pinch', pois também irá causar o travamento da aplicação.
 - Por conta da interpolação dos dados equilíbrio, não há precisão total no desenho da escada de McCabe-Thiele, similarmente ao que ocorre na aplicação real deste método gráfico.
+- O método não é aplicável após o ponto de azeótropo.
 
 
 *Implementação didática do método de McCabe-Thiele para estudos de destilação binária.*
