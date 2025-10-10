@@ -2,8 +2,8 @@
 """
 Título: Implementação do método gráfico de McCabe-Thiele
 Autor: Thiago Pacheco de Souza
-Data: 2025-10-08
-Versão: 1.0
+Data: 2025-10-10
+Versão: 1.2
 Descrição:
     Este programa aplica o método gráfico de McCabe-Thiele para resoluçaõ de um sistema de destilação 
     binária, gerando o gráfico e indicando os estágios necessários.
@@ -48,12 +48,12 @@ Dependências externas:
 
 pressao = 101325
 especies = "etanol", "agua"
-zF = 0.6
+zF = 0.5
 xD = 0.8
 xB = 0.05
-R = 1.3 * 7/6
+R = 7/3 # Para R->inf, use um valor alto (R=10000, por exemplo). Nesse caso, o ideal é desativar o modo interativo
 q = 1
-INTERATIVO = False #Pode deixar um pouco lento...
+INTERATIVO = True #Pode deixar um pouco lento...
 SALVAR = False
 
 
