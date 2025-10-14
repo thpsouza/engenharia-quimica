@@ -22,7 +22,7 @@ def plotar_diagrama_equilibrio(axis, X, Y, especie_principal):
     axis.grid(which='minor', linestyle=':', linewidth=0.75, alpha=0.8)
     axis.minorticks_on()
     axis.legend()
-
+    
 
 def atualizar_plot(x, fig, ax, McCabe, slider_zF, slider_q, slider_R):
     for plot in McCabe.plots:
@@ -42,45 +42,59 @@ def atualizar_plot(x, fig, ax, McCabe, slider_zF, slider_q, slider_R):
     fig.canvas.draw_idle()
 
 
-def aplicar_metodo_mccabe_thiele(especies, zF, xD, xB, R, q, pressao=101325, interativo=False, save=False):
+def aplicar_metodo_mccabe_thiele(especies, zF, xD, xB, R, q, Eml=1.0, Emv=1.0, pressao=101325, equilibrio=None, 
+                                 plotar=True, interativo=False, save=False, pontos=100):
     fig,ax = plt.subplots(figsize=(9,9))
     fig.suptitle(f"""Destilação binária {especies[0].capitalize()}/{especies[1].capitalize()} - McCabe-Thiele 
     ({pressao/101325:.1f} atm)""")
     
-    # Cálcular equilibrio
-    Eq = EquilibrioTermodinamico()
-    T0 = 323 # chute inicial
-    X = np.linspace(0,1,100)
-    *Y,T = Eq.calcular(especies, [X, 1-X], pressao, T0)
+    if equilibrio:
+        X, Y, T = equilibrio 
+        Y = [Y]
+    else:
+        # Calcular equilibrio:
+        Eq = EquilibrioTermodinamico()
+        T0 = 323 # chute inicial
+        X = np.linspace(0,1,pontos)
+        *Y,T = Eq.calcular(especies, [X, 1-X], pressao, T0)
     
-    # Interpolando os dados para obter y a partir de x e x a partir de y:
+    # Interpolar os dados:
     y_de_x = interp1d(X, Y[0], kind='cubic', fill_value="extrapolate")  # type: ignore
     x_de_y = interp1d(Y[0], X, kind='cubic', fill_value="extrapolate")  # type: ignore
+    if len(T)>0:
+        T_de_x = interp1d(X, T, kind='cubic', fill_value="extrapolate") #type: ignore
+    else:
+        T_de_x = None
     
     # Plotar diagrama 
-    plotar_diagrama_equilibrio(ax, X, Y[0], especies[0])
+    X = np.linspace(0,1,pontos)
+    plotar_diagrama_equilibrio(ax, X, y_de_x(X), especies[0])
     
     # Montar escada e obter estágios
-    Mc = McCabeThieleMethod(zF, xD, xB, R, q, y_de_x, x_de_y)
+    ## Futuramente, a ideia é avaliar se faz sentido, em termos de performance, separar o cálculo dos estágios do plot em si.
+    Mc = McCabeThieleMethod(zF, xD, xB, R, q, Emv, Eml, y_de_x, x_de_y, T_de_x)
     Mc.plotar_retas_operacao(ax)
-    Mc.montar_escada(ax)
+    Mc.montar_escada(ax) 
     Mc.plotar_detalhes(ax)
     Mc.imprimir_detalhes()
     
-    # Sliders
-    if interativo:
-        plt.subplots_adjust(left=0.1, bottom=0.18)
-        ax_zF = plt.axes([0.1, 0.09, 0.8, 0.02]) # type: ignore
-        ax_R = plt.axes([0.1, 0.06, 0.8, 0.02]) # type: ignore
-        ax_q = plt.axes([0.1, 0.03, 0.8, 0.02]) # type: ignore
-        slider_zF = Slider(ax_zF, "$z_F$", xB+0.01, xD-0.01, valinit=zF, valstep=0.01)
-        slider_R = Slider(ax_R, "$R$", 0, 100, valinit=R, valstep=0.5)
-        slider_q = Slider(ax_q, "q", 0.1, 2.0, valinit=q, valstep=0.01)
-        f = lambda x: atualizar_plot(x, fig, ax, Mc, slider_zF, slider_q, slider_R)
-        slider_zF.on_changed(f)
-        slider_R.on_changed(f)
-        slider_q.on_changed(f)
+    if plotar:
+        # Sliders
+        if interativo:
+            plt.subplots_adjust(left=0.1, bottom=0.18)
+            ax_zF = plt.axes([0.1, 0.09, 0.8, 0.02]) # type: ignore
+            ax_R = plt.axes([0.1, 0.06, 0.8, 0.02]) # type: ignore
+            ax_q = plt.axes([0.1, 0.03, 0.8, 0.02]) # type: ignore
+            slider_zF = Slider(ax_zF, "$z_F$", xB+0.01, xD-0.01, valinit=zF, valstep=0.01)
+            slider_R = Slider(ax_R, "$R$", 0, 100, valinit=R, valstep=0.2)
+            slider_q = Slider(ax_q, "q", 0.1, 2.0, valinit=q, valstep=0.01)
+            f = lambda x: atualizar_plot(x, fig, ax, Mc, slider_zF, slider_q, slider_R)
+            slider_zF.on_changed(f)
+            slider_R.on_changed(f)
+            slider_q.on_changed(f)
+            
+        if save:
+            plt.savefig(f"Graficos/McCabe-Thiele {especies[0].capitalize()}-{especies[1].capitalize()}.pdf")   
+            
+        plt.show()
         
-    if save:
-        plt.savefig(f"Graficos/McCabe-Thiele {especies[0].capitalize()}-{especies[1].capitalize()}.pdf")   
-    plt.show()

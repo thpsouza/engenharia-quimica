@@ -1,8 +1,8 @@
 # Implementação do Método Gráfico de McCabe-Thiele
 
 **Autor:** Thiago Pacheco de Souza  
-**Data:** 10/10/2025  
-**Versão:** 1.1 
+**Data:** 14/10/2025  
+**Versão:** 1.4 
 
 ---
 
@@ -30,9 +30,9 @@ As correções de Poynting e os coeficientes de fugacidade não foram implementa
 - Acetona  
 - Clorofórmio  
 
-O módulo de aplicação do método é independente do módulo de equilíbrio, mas requer uma função de equilíbrio para esboçar os degraus. Para fins de performance, isso é feito interpolando
-entre os pontos gerados pelo cálculo do equilíbrio. (Por padrão, são gerados 100 pontos.)
-Futuramente, pretende-se implementar uma funcionalidade para inserção manual dos dados de equilíbrio, bem como uma opção de alterar a quantidade de pontos gerados pela calculadora implementada.
+O módulo de aplicação do método é independente do módulo de equilíbrio, mas requer uma função de equilíbrio para esboçar os degraus. Para fins de performance, isso é feito interpolando entre os pontos gerados pelo cálculo do equilíbrio. (Por padrão, são gerados 100 pontos.)
+
+É possível inserir manualmente os pontos X,Y,T do equilíbrio, que serão interpolados cubicamente e plotados no diagrama.
 
 Além do módulo principal, há três scripts auxiliares para testar individualmente cada funcionalidade da geração de dados de equilíbrio, localizados na pasta 'Testes'.
 
@@ -58,6 +58,8 @@ Além do módulo principal, há três scripts auxiliares para testar individualm
 - No modo interativo, é possível que atualizações muito rápidas crashem o programa.
 - Por conta da interpolação dos dados equilíbrio, não há precisão total no desenho da escada de McCabe-Thiele, similarmente ao que ocorre na aplicação real deste método gráfico.
 - O método não é aplicável após o ponto de azeótropo.
+- Alguns cálculos de equilíbrio podem apresentar desvios.
+- Por enquanto, só são suportados casos com refervedor parcial e condensador total.
 
 
 *Implementação didática do método de McCabe-Thiele para estudos de destilação binária.*
