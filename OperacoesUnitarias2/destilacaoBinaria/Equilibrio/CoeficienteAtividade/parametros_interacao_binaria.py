@@ -71,7 +71,10 @@ class ParametrosInteracaoBinaria:
         self.especies = [especie.upper() for especie in especies]
         self._reduzir_tabelas()
         self._espelhar_C()
+        self.called = False
         return self.tabelas_reduzidas
+        # Não há defesa contra espécies inválidas aqui, pois se assume que isso já foi feito anteriormente
+        # pelo módulo de equilíbrio.
     
     
 class ParametrosNRTL(ParametrosInteracaoBinaria):

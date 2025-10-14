@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import root
 from Equilibrio.CoeficienteAtividade.NRTL import ModeloNRTL
-from Equilibrio.CoeficienteAtividade.parametros_interacao_binaria import ParametrosNRTL
+from Equilibrio.CoeficienteAtividade.parametros_interacao_binaria import ParametrosNRTL, ESPECIES_POSSIVEIS
 from Equilibrio.PressaoSaturacao.substancias_antoine import *
 # from Correcoes.poynting import PoyntingFactor
 
@@ -16,25 +16,25 @@ class EquilibrioTermodinamico:
         return coefs
 
     def pressao_saturacao(self, especie, temperatura):
-        match especie.lower():
-            case "agua":
+        match especie.upper():
+            case "AGUA":
                 modelo = AntoineAgua()
-            case "etanol":
+            case "ETANOL":
                 modelo = AntoineEtanol()
-            case "benzeno":
+            case "BENZENO":
                 modelo = AntoineBenzeno()
-            case "tolueno":
+            case "TOLUENO":
                 modelo = AntoineTolueno()
-            case "metanol":
+            case "METANOL":
                 modelo = AntoineMetanol()
-            case "cloroformio":
+            case "CLOROFORMIO":
                 modelo = AntoineCloroformio()
-            case "acetona":
+            case "ACETONA":
                 modelo = AntoineAcetona()
-            case "p-xileno":
+            case "P-XILENO":
                 modelo = AntoinePXILENO()
             case _ :
-                raise ValueError("Para calcular a pressão de saturação, é necessário inserir uma substância válida. \n")
+                raise ValueError(f"Não é possível calcular a pressão de saturação da espécie '{especie}'. \n")
         return modelo(temperatura)
 
     def coeficiente_equilibrio(self, gamma, Psat, P, poynting=1, phi_sat=1, phi_v=1):
@@ -84,6 +84,11 @@ class EquilibrioTermodinamico:
 
     def calcular(self, especies, X, pressao, T0=None):
         self.called = True
+        
+        ## Defesa
+        for especie in especies:
+            if especie.upper() not in ESPECIES_POSSIVEIS:
+                raise ValueError(f"Não é possível calcular o equilíbrio para a espécie '{especie}'. \n")
         
         ## Cálculo para múltiplas composições
         if isinstance(X[0], (list,tuple,np.ndarray)):
