@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 import matplotlib.pyplot as plt
 from Equilibrio.equilibrio import EquilibrioTermodinamico
+from Equilibrio.dados_manuais import equilibrio_etanol_agua, equilibrio_cloroformio_benzeno
 
 
 def calcular_curvas_de_equilibrio(modelo, especies, X, pressao, T0=None):    
@@ -20,7 +21,7 @@ def calcular_curvas_de_equilibrio(modelo, especies, X, pressao, T0=None):
 
 
 def _plotar_diagrama_equilibrio(axis, X, Y, especie_principal):
-    axis.plot(X,Y,label="Reta de equilíbrio")
+    axis.plot(X,Y,label="Curva de equilíbrio calculada")
     axis.plot(X,X,label="Reta auxiliar",color="tab:grey")
     axis.set_xlim((0,1))
     axis.set_ylim((0,1))
@@ -44,6 +45,15 @@ def _plotar_diagrama_TXY(axis, T, X, Y, especie_principal):
 
 def plotar(T, X, Y, especies, pressao, save=False, format='pdf'):
     fig, axs = plt.subplots(1,2,figsize=(12, 6),subplot_kw=dict(box_aspect=1))
+    match especies:
+        case ["etanol", "agua"]:
+            XY = equilibrio_etanol_agua()
+        case ["cloroformio", "benzeno"]:
+            XY = equilibrio_cloroformio_benzeno()
+        case _:
+            XY = None
+    if XY:
+        axs[0].scatter(*XY, label="Dados manuais", alpha=0.6, marker=".")
     _plotar_diagrama_equilibrio(axs[0], X, Y, especies[0])
     _plotar_diagrama_TXY(axs[1], T, X, Y, especies[0])
     fig.suptitle(f"{especies[0]}/{especies[1]}\n({pressao/101325:.0f} atm)")
@@ -55,7 +65,7 @@ def plotar(T, X, Y, especies, pressao, save=False, format='pdf'):
 def main():
     # Dados
     pressao = 101325
-    especies = "Etanol", "Agua"
+    especies = "etanol", "agua" #letras minusculas
     equilibrio = EquilibrioTermodinamico()
     
     # Calculo individual
@@ -64,9 +74,9 @@ def main():
     print(f"x = {x:.4f}, y = {y1:.4f}, T = {temp-273.15:.4f} °C")
     
     # Plot
-    # X = np.linspace(0,1,100)
-    # Y, T = calcular_curvas_de_equilibrio(equilibrio, especies, X, pressao)
-    # plotar(T, X, Y, especies, pressao, save=True)    
+    X = np.linspace(0,1,100)
+    Y, T = calcular_curvas_de_equilibrio(equilibrio, especies, X, pressao)
+    plotar(T, X, Y, especies, pressao, save=True)    
     
 
 if __name__ == "__main__":
