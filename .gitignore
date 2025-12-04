@@ -1,8 +1,13 @@
 # Dirs
-/.idea
-/.vscode
+**/.idea
+**/.vscode
 build/
 dist/
+
+# files
+OperacoesUnitarias2/destilacaoBinaria/Flash/flash.py
+OperacoesUnitarias2/destilacaoBinaria/resultados.txt
+OperacoesUnitarias2/destilacaoBinaria/alteracoes.txt
 
 # Shortcuts
 *.lnk
@@ -44,3 +49,4 @@ __pycache__/
 *.exe
 *.out
 *.app
+
