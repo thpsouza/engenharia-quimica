@@ -1,8 +1,8 @@
 # Implementação do Método Gráfico de McCabe-Thiele
 
 **Autor:** Thiago Pacheco de Souza  
-**Data:** 14/10/2025  
-**Versão:** 1.4 
+**Data:** 20/01/2026
+**Versão:** 2.0
 
 ---
 
@@ -34,7 +34,8 @@ O módulo de aplicação do método é independente do módulo de equilíbrio, m
 
 É possível inserir manualmente os pontos X,Y,T do equilíbrio, que serão interpolados cubicamente e plotados no diagrama.
 
-Além do módulo principal, há três scripts auxiliares para testar individualmente cada funcionalidade da geração de dados de equilíbrio, localizados na pasta 'Testes'.
+Além do módulo principal, há quatro scripts auxiliares para testar individualmente cada funcionalidade da geração de dados de equilíbrio, bem como a aplicação do
+método de McCabe-Thiele (apenas no console), localizados na pasta 'Testes'.
 
 ---
 
